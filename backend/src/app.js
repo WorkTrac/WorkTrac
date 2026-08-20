@@ -1,7 +1,6 @@
-// redeploy
 const express = require("express");
 const cors = require("cors");
-const cookieParser = require("cookie-parser"); 
+const cookieParser = require("cookie-parser");
 
 const attendanceRoutes = require("./routes/attendanceRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -17,31 +16,21 @@ const notFound = require("./middleware/notFoundMiddleware");
 const errorHandler = require("./middleware/errorMiddleware");
 
 const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? ['https://work-trac.vercel.app']   // ← Replace with your actual Vercel URL
+  ? ['https://work-trac.vercel.app']   // Replace with your actual Vercel URL
   : ['http://localhost:3000', 'http://localhost:5173'];
 
 const app = express();
 
-// ===============================
-// CORS - ONLY ONCE
-// ===============================
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
-app.use(cookieParser());
+
 app.use(express.json());
+app.use(cookieParser()); // ✅ Parse cookies
 
-// ===============================
-// ROOT API
-// ===============================
-app.get("/", (req, res) => {
-    res.send("WorkTrac API is running");
-});
+app.get("/", (req, res) => res.send("WorkTrac API is running"));
 
-// ===============================
-// ROUTES
-// ===============================
 app.use("/api/employees", employeeRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/auth", authRoutes);
@@ -52,10 +41,6 @@ app.use("/api/leavetypes", leaveTypeRoutes);
 app.use("/api/admin/analytics", analyticsRoutes);
 app.use("/api/admin/audit", auditRoutes);
 
-// ===============================
-// GLOBAL ERROR HANDLER
-// MUST BE LAST
-// ===============================
 app.use(notFound);
 app.use(errorHandler);
 
