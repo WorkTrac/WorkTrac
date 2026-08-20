@@ -58,8 +58,8 @@ exports.login = async (req, res) => {
     // Set refresh token as HttpOnly cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -110,8 +110,8 @@ exports.refreshToken = async (req, res) => {
     // Set new refresh token cookie
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
