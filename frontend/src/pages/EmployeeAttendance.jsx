@@ -18,7 +18,6 @@ function EmployeeAttendance() {
             const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
             const salt = Math.random().toString(36).substring(2, 10);
             const raw = `${ua}|${screen}|${tz}|${salt}`;
-            // simple base64 encoding
             deviceId = btoa(raw).replace(/[^a-zA-Z0-9]/g, '').substring(0, 20);
             localStorage.setItem('worktrac_device_id', deviceId);
         }
@@ -121,6 +120,9 @@ function EmployeeAttendance() {
             <h1>Mark Attendance</h1>
             <p>Sign in and out with GPS verification</p>
 
+            {/* ==========================================
+                TODAY'S ATTENDANCE CARD
+            ========================================== */}
             <div className="employee-attendance-card">
                 <h2>Today's Attendance</h2>
                 {todayStatus === "signed-in" && (
@@ -168,17 +170,22 @@ function EmployeeAttendance() {
                 </div>
             </div>
 
+            {/* ==========================================
+                📱 YOUR DEVICE ID CARD
+            ========================================== */}
+            <div className="employee-attendance-card" style={{ background: "#f0f9ff", border: "1px solid #bae6fd" }}>
+                <h2>📱 Your Device ID</h2>
+                <p style={{ fontSize: "14px", wordBreak: "break-all", fontFamily: "monospace" }}>
+                    {getDeviceId()}
+                </p>
+                <small style={{ color: "#64748b" }}>
+                    This ID is unique to your browser/device. If you need to register a new device, contact your admin.
+                </small>
+            </div>
 
-             <div className="employee-attendance-card" style={{ background: "#f0f9ff", border: "1px solid #bae6fd" }}>
-      <h2>📱 Your Device ID</h2>
-      <p style={{ fontSize: "14px", wordBreak: "break-all", fontFamily: "monospace" }}>
-        {getDeviceId()}
-      </p>
-      <small style={{ color: "#64748b" }}>
-        This ID is unique to your browser/device. If you need to register a new device, contact your admin.
-      </small>
-    </div>
-
+            {/* ==========================================
+                RECENT HISTORY CARD
+            ========================================== */}
             <div className="employee-attendance-card">
                 <h2>Recent History</h2>
                 {history.length === 0 ? (
