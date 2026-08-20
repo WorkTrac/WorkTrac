@@ -130,14 +130,17 @@ exports.signIn = async (req, res) => {
         // CHECK REGISTERED DEVICE
         // ===============================
 
-        if (!employee.deviceId) {
-
-            return res.status(403).json({
-
-                message:
-                    "No device registered for this employee. Contact admin."
-
-            });
+       // ✅ NEW: Auto-register device ID if not set
+if (!employee.deviceId) {
+  // First time this employee signs in – register the device
+  employee.deviceId = deviceId;
+  await employee.save();
+  console.log(`📱 Device ID registered for ${employee.email}: ${deviceId}`);
+} else if (employee.deviceId !== deviceId) {
+  // Device mismatch – reject
+  return res.status(403).json({
+    message: "Attendance can only be recorded from the registered device",
+  });
 
         }
         // ✅ ADD THESE TWO LINES TO SEE THE MISMATCH
