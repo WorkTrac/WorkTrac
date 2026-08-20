@@ -60,6 +60,7 @@ exports.login = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
+      domain: ".onrender.com",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -86,8 +87,11 @@ exports.login = async (req, res) => {
 // REFRESH TOKEN
 // ===============================
 exports.refreshToken = async (req, res) => {
+  console.log("🍪 Cookies received:", req.cookies);  // ✅ DEBUG
+  
   const { refreshToken } = req.cookies;
   if (!refreshToken) {
+    console.log("❌ No refresh token in cookies");
     return res.status(401).json({ message: "Refresh token missing" });
   }
 
@@ -112,6 +116,7 @@ exports.refreshToken = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
+      domain: ".onrender.com",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -129,7 +134,12 @@ exports.logout = async (req, res) => {
   if (refreshToken) {
     await RefreshToken.destroy({ where: { token: refreshToken } });
   }
-  res.clearCookie("refreshToken");
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    domain: ".onrender.com",
+  });
   res.json({ message: "Logged out successfully" });
 };
 
@@ -213,3 +223,5 @@ exports.resetPassword = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+
