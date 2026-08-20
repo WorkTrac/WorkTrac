@@ -168,6 +168,17 @@ function EmployeeAttendance() {
                 </div>
             </div>
 
+
+             <div className="employee-attendance-card" style={{ background: "#f0f9ff", border: "1px solid #bae6fd" }}>
+      <h2>📱 Your Device ID</h2>
+      <p style={{ fontSize: "14px", wordBreak: "break-all", fontFamily: "monospace" }}>
+        {getDeviceId()}
+      </p>
+      <small style={{ color: "#64748b" }}>
+        This ID is unique to your browser/device. If you need to register a new device, contact your admin.
+      </small>
+    </div>
+
             <div className="employee-attendance-card">
                 <h2>Recent History</h2>
                 {history.length === 0 ? (
