@@ -11,7 +11,7 @@ function EmployeeAttendance() {
     const [todayStatus, setTodayStatus] = useState(null);
     const [deviceId, setDeviceId] = useState("");
 
-    // ✅ Generate device fingerprint using FingerprintJS
+    // Generate FingerprintJS ID
     const generateDeviceId = async () => {
         try {
             const fp = await FingerprintJS.load();
@@ -34,7 +34,7 @@ function EmployeeAttendance() {
         }
     };
 
-    // ✅ Initialize device ID on component mount
+    // Initialize device ID on mount
     useEffect(() => {
         const initDeviceId = async () => {
             let cachedId = localStorage.getItem('worktrac_device_id');
@@ -48,7 +48,6 @@ function EmployeeAttendance() {
         initDeviceId();
     }, []);
 
-    // Get location
     const getLocation = () => {
         return new Promise((resolve, reject) => {
             if (!navigator.geolocation) {
@@ -142,7 +141,6 @@ function EmployeeAttendance() {
             <h1>Mark Attendance</h1>
             <p>Sign in and out with GPS verification</p>
 
-            {/* TODAY'S ATTENDANCE CARD */}
             <div className="employee-attendance-card">
                 <h2>Today's Attendance</h2>
                 {todayStatus === "signed-in" && (
@@ -190,7 +188,7 @@ function EmployeeAttendance() {
                 </div>
             </div>
 
-            {/* 📱 DEVICE ID CARD - Shows FingerprintJS ID */}
+            {/* Device ID Display */}
             <div className="employee-attendance-card" style={{ background: "#f0f9ff", border: "1px solid #bae6fd" }}>
                 <h2>📱 Your Device ID</h2>
                 <p style={{ fontSize: "14px", wordBreak: "break-all", fontFamily: "monospace" }}>
@@ -201,7 +199,6 @@ function EmployeeAttendance() {
                 </small>
             </div>
 
-            {/* RECENT HISTORY CARD */}
             <div className="employee-attendance-card">
                 <h2>Recent History</h2>
                 {history.length === 0 ? (
