@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiRequest } from "../api/api";
 import { getISTDate } from "../utils/dateUtils";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 function EmployeeAttendance() {
     const [loading, setLoading] = useState(false);
@@ -8,21 +9,44 @@ function EmployeeAttendance() {
     const [success, setSuccess] = useState("");
     const [history, setHistory] = useState([]);
     const [todayStatus, setTodayStatus] = useState(null);
+    const [deviceId, setDeviceId] = useState("");
 
-    // Stable device fingerprint
-    const getDeviceId = () => {
-        let deviceId = localStorage.getItem('worktrac_device_id');
-        if (!deviceId) {
-            const ua = navigator.userAgent;
-            const screen = `${window.screen.width}x${window.screen.height}`;
-            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const salt = Math.random().toString(36).substring(2, 10);
-            const raw = `${ua}|${screen}|${tz}|${salt}`;
-            deviceId = btoa(raw).replace(/[^a-zA-Z0-9]/g, '').substring(0, 20);
-            localStorage.setItem('worktrac_device_id', deviceId);
+    // ✅ Generate device fingerprint using FingerprintJS
+    const generateDeviceId = async () => {
+        try {
+            const fp = await FingerprintJS.load();
+            const result = await fp.get();
+            const visitorId = result.visitorId;
+            localStorage.setItem('worktrac_device_id', visitorId);
+            return visitorId;
+        } catch (error) {
+            console.error("Fingerprint error:", error);
+            let fallbackId = localStorage.getItem('worktrac_device_id');
+            if (!fallbackId) {
+                fallbackId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    const r = Math.random() * 16 | 0;
+                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+                localStorage.setItem('worktrac_device_id', fallbackId);
+            }
+            return fallbackId;
         }
-        return deviceId;
     };
+
+    // ✅ Initialize device ID on component mount
+    useEffect(() => {
+        const initDeviceId = async () => {
+            let cachedId = localStorage.getItem('worktrac_device_id');
+            if (cachedId) {
+                setDeviceId(cachedId);
+            } else {
+                const id = await generateDeviceId();
+                setDeviceId(id);
+            }
+        };
+        initDeviceId();
+    }, []);
 
     // Get location
     const getLocation = () => {
@@ -67,7 +91,6 @@ function EmployeeAttendance() {
             setError("");
             setSuccess("");
 
-            const deviceId = getDeviceId();
             const location = await getLocation();
 
             const data = await apiRequest("/attendance/signin", {
@@ -94,7 +117,6 @@ function EmployeeAttendance() {
             setError("");
             setSuccess("");
 
-            const deviceId = getDeviceId();
             const location = await getLocation();
 
             const data = await apiRequest("/attendance/signout", {
@@ -120,9 +142,7 @@ function EmployeeAttendance() {
             <h1>Mark Attendance</h1>
             <p>Sign in and out with GPS verification</p>
 
-            {/* ==========================================
-                TODAY'S ATTENDANCE CARD
-            ========================================== */}
+            {/* TODAY'S ATTENDANCE CARD */}
             <div className="employee-attendance-card">
                 <h2>Today's Attendance</h2>
                 {todayStatus === "signed-in" && (
@@ -170,22 +190,18 @@ function EmployeeAttendance() {
                 </div>
             </div>
 
-            {/* ==========================================
-                📱 YOUR DEVICE ID CARD
-            ========================================== */}
+            {/* 📱 DEVICE ID CARD */}
             <div className="employee-attendance-card" style={{ background: "#f0f9ff", border: "1px solid #bae6fd" }}>
                 <h2>📱 Your Device ID</h2>
                 <p style={{ fontSize: "14px", wordBreak: "break-all", fontFamily: "monospace" }}>
-                    {getDeviceId()}
+                    {deviceId || "Loading..."}
                 </p>
                 <small style={{ color: "#64748b" }}>
-                    This ID is unique to your browser/device. If you need to register a new device, contact your admin.
+                    This ID is unique to your device. Each device gets a different ID.
                 </small>
             </div>
 
-            {/* ==========================================
-                RECENT HISTORY CARD
-            ========================================== */}
+            {/* RECENT HISTORY CARD */}
             <div className="employee-attendance-card">
                 <h2>Recent History</h2>
                 {history.length === 0 ? (
