@@ -190,7 +190,7 @@ function EmployeeAttendance() {
                 </div>
             </div>
 
-            {/* 📱 DEVICE ID CARD */}
+            {/* 📱 DEVICE ID CARD - Shows FingerprintJS ID */}
             <div className="employee-attendance-card" style={{ background: "#f0f9ff", border: "1px solid #bae6fd" }}>
                 <h2>📱 Your Device ID</h2>
                 <p style={{ fontSize: "14px", wordBreak: "break-all", fontFamily: "monospace" }}>
