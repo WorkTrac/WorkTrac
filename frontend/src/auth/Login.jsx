@@ -18,25 +18,44 @@ function Login({ onLogin }) {
   const [resetSuccess, setResetSuccess] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      const data = await apiRequest("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-      const token = data.token || data.accessToken || data.jwt;
-      if (!token) throw new Error("Login successful but token was not returned");
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(data.user || data.employee || {}));
-      onLogin(data);
-    } catch (err) {
-      setError(err.message || "Login failed");
-    } finally {
-      setLoading(false);
+  e.preventDefault();
+  setError("");
+  setLoading(true);
+  
+  console.log("🚀 Login attempt started");  // ✅ DEBUG
+  
+  try {
+    console.log("📤 Sending request to /auth/login with:", { email, password: "***" });
+    
+    const data = await apiRequest("/auth/login", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
+    
+    console.log("📥 Login response received:", data);
+    
+    const token = data.token || data.accessToken || data.jwt;
+    console.log("🔑 Extracted token:", token);
+    
+    if (!token) {
+      console.error("❌ No token in response!");
+      throw new Error("Login successful but token was not returned");
     }
-  };
+    
+    console.log("💾 Saving token to localStorage");
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(data.user || data.employee || {}));
+    
+    console.log("✅ Login complete, calling onLogin");
+    onLogin(data);
+  } catch (err) {
+    console.error("❌ Login error:", err);
+    setError(err.message || "Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   // ==============================
   // FORGOT PASSWORD LOGIC
