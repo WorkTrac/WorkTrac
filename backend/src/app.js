@@ -1,6 +1,7 @@
 // redeploy
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser"); 
 
 const attendanceRoutes = require("./routes/attendanceRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -28,7 +29,7 @@ app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
-
+app.use(cookieParser());
 app.use(express.json());
 
 // ===============================
