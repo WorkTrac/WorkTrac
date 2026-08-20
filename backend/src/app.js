@@ -14,7 +14,7 @@ const auditRoutes = require("./routes/auditRoutes");
 const notFound = require("./middleware/notFoundMiddleware");
 const errorHandler = require("./middleware/errorMiddleware");
 const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? ['https://your-frontend.vercel.app']   // Replace with your actual Vercel URL later
+  ? ['https://work-trac.vercel.app']   // Replace with your actual Vercel URL later
   : ['http://localhost:5000'];
 
 
