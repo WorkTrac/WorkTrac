@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiRequest } from "../api/api";
-import { getISTDate } from "../utils/dateUtils";
+import { getISTDate, formatTimeIST } from "../utils/dateUtils";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 function EmployeeAttendance() {
@@ -211,10 +211,10 @@ function EmployeeAttendance() {
                                 {record.signInTime ? "✅" : "❌"}
                             </span>
                             <div style={{ fontSize: "12px", color: "#6b7280" }}>
-                                {record.signInTime && `In: ${new Date(record.signInTime).toLocaleTimeString()}`}
-                                {record.signOutTime && ` | Out: ${new Date(record.signOutTime).toLocaleTimeString()}`}
-                                {record.workingHours && ` | 🕒 ${record.workingHours}`}
-                            </div>
+  {record.signInTime && `In: ${formatTimeIST(record.signInTime)}`}
+  {record.signOutTime && ` | Out: ${formatTimeIST(record.signOutTime)}`}
+  {record.workingHours && ` | 🕒 ${record.workingHours}`}
+</div>
                         </div>
                     ))
                 )}
