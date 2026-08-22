@@ -23,7 +23,34 @@ function EmployeeDashboard() {
         loadDashboard();
     }, []);
 
-    if (loading) return <div className="page-loading">Loading dashboard...</div>;
+    if (loading) {
+    return (
+        <div className="page-loading" style={{
+            background: "transparent",
+            minHeight: "200px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white"
+        }}>
+            <div style={{
+                textAlign: "center",
+                padding: "40px"
+            }}>
+                <div style={{
+                    width: "50px",
+                    height: "50px",
+                    margin: "0 auto 20px",
+                    border: "3px solid rgba(255,255,255,0.1)",
+                    borderTop: "3px solid rgba(255,255,255,0.8)",
+                    borderRadius: "50%",
+                    animation: "spin 0.8s linear infinite"
+                }}></div>
+                <span style={{ color: "rgba(255,255,255,0.7)" }}>Loading dashboard...</span>
+            </div>
+        </div>
+    );
+}
     if (error) return <div className="dashboard-error"><p>{error}</p><button onClick={loadDashboard}>Try Again</button></div>;
 
     const user = JSON.parse(localStorage.getItem("user") || "{}");
