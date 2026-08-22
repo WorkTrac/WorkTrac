@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { apiRequest } from "../api/api";
+import { formatTimeIST } from "../utils/dateUtils";
 
 
 function DepartmentSummary() {
@@ -742,42 +743,12 @@ function DepartmentSummary() {
                                                                 </td>
 
 
-                                                                <td>
-                                                                    {
-                                                                        employee.signInTime
-                                                                            ? new Date(
-                                                                                employee.signInTime
-                                                                            ).toLocaleTimeString(
-                                                                                [],
-                                                                                {
-                                                                                    hour:
-                                                                                        "2-digit",
-                                                                                    minute:
-                                                                                        "2-digit"
-                                                                                }
-                                                                            )
-                                                                            : "—"
-                                                                    }
-                                                                </td>
-
-
-                                                                <td>
-                                                                    {
-                                                                        employee.signOutTime
-                                                                            ? new Date(
-                                                                                employee.signOutTime
-                                                                            ).toLocaleTimeString(
-                                                                                [],
-                                                                                {
-                                                                                    hour:
-                                                                                        "2-digit",
-                                                                                    minute:
-                                                                                        "2-digit"
-                                                                                }
-                                                                            )
-                                                                            : "—"
-                                                                    }
-                                                                </td>
+                                                               <td>
+  {employee.signInTime ? formatTimeIST(employee.signInTime) : "—"}
+</td>
+<td>
+  {employee.signOutTime ? formatTimeIST(employee.signOutTime) : "—"}
+</td>
 
                                                             </tr>
 
