@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiRequest } from "../api/api";
 import { getISTMonth } from "../utils/dateUtils";
+import { formatTimeIST } from "../utils/dateUtils";
 
 function MonthlyAttendance() {
   const [employees, setEmployees] = useState([]);
@@ -120,8 +121,8 @@ function MonthlyAttendance() {
                       <tr key={record.date}>
                         <td><strong>{record.date || "—"}</strong></td>
                         <td><span className={`status-badge ${record.status?.toLowerCase() === "present" ? "status-active" : "status-inactive"}`}>{record.status || "Unknown"}</span></td>
-                        <td>{record.signIn || "—"}</td>
-                        <td>{record.signOut || "—"}</td>
+                        <td>{record.signIn ? formatTimeIST(record.signIn) : "—"}</td>
+                        <td>{record.signOut ? formatTimeIST(record.signOut) : "—"}</td>
                         <td>{record.workingHours || "—"}</td>
                         <td>{record.deviceId || "—"}</td>
                         <td>{record.signInLatitude != null && record.signInLongitude != null ? `${record.signInLatitude}, ${record.signInLongitude}` : "—"}</td>
