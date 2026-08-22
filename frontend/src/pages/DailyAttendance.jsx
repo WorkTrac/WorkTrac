@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiRequest } from "../api/api";
 import { getISTDate } from "../utils/dateUtils";
+import { formatTimeIST } from "../utils/dateUtils";
 
 function DailyAttendance() {
   const [date, setDate] = useState(getISTDate());
@@ -77,8 +78,8 @@ function DailyAttendance() {
                       <td>{employee.employeeName || "—"}</td>
                       <td>{employee.department || "Not Assigned"}</td>
                       <td><span className={`status-badge ${isPresent ? "status-active" : "status-inactive"}`}>{employee.status || "Unknown"}</span></td>
-                      <td>{employee.signIn || "—"}</td>
-                      <td>{employee.signOut || "—"}</td>
+                      <td>{employee.signIn ? formatTimeIST(employee.signIn) : "—"}</td>
+                     <td>{employee.signOut ? formatTimeIST(employee.signOut) : "—"}</td>
                       <td>{employee.workingHours || "—"}</td>
                     </tr>
                   );
