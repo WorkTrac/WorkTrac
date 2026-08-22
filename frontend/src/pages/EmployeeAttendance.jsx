@@ -188,16 +188,31 @@ function EmployeeAttendance() {
                 </div>
             </div>
 
-            {/* Device ID Display */}
-            <div className="employee-attendance-card" style={{ background: "#f0f9ff", border: "1px solid #bae6fd" }}>
-                <h2>📱 Your Device ID</h2>
-                <p style={{ fontSize: "14px", wordBreak: "break-all", fontFamily: "monospace" }}>
-                    {deviceId || "Loading..."}
-                </p>
-                <small style={{ color: "#64748b" }}>
-                    This ID is unique to your device. Each device gets a different ID.
-                </small>
-            </div>
+            {/* Device ID Display - Glass Card */}
+<div className="employee-attendance-card" style={{ 
+    background: "rgba(255, 255, 255, 0.06)", 
+    border: "1px solid rgba(255, 255, 255, 0.12)",
+    backdropFilter: "blur(20px)",
+    WebkitBackdropFilter: "blur(20px)",
+    borderRadius: "16px"
+}}>
+    <h2>📱 Your Device ID</h2>
+    <p style={{ 
+        fontSize: "14px", 
+        wordBreak: "break-all", 
+        fontFamily: "monospace",
+        color: "rgba(255, 255, 255, 0.9)",
+        background: "rgba(255, 255, 255, 0.05)",
+        padding: "12px",
+        borderRadius: "10px",
+        border: "1px solid rgba(255, 255, 255, 0.05)"
+    }}>
+        {deviceId || "Loading..."}
+    </p>
+    <small style={{ color: "rgba(255, 255, 255, 0.5)" }}>
+        This ID is unique to your device. Each device gets a different ID.
+    </small>
+</div>
 
             <div className="employee-attendance-card">
                 <h2>Recent History</h2>
